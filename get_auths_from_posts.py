@@ -13,8 +13,8 @@ def get_supporters_from_file(filename, supporter_set):
     for line in lines:
         this_dict = json.loads(line)
         # Verify that there is an author associated with the post
-        if 'author_fullname' in this_dict:
-            author = this_dict['author_fullname']
+        if 'author' in this_dict:
+            author = this_dict['author']
             supporter_set.add(author)
     return supporter_set
 
@@ -28,11 +28,17 @@ def add_to_supporter_set(candidate_files, supporter_set):
         supporter_set = supporter_set.union(supporters)
     return supporter_set
 
+def write_supporters_to_txt(filename, supporter_list):
+    with open(filename, 'w') as f:
+        for supporter in supporter_list:
+            f.write(supporter)
+            f.write('\n')
+
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('input_file', help='The path to the JSON file to be parsed')
-    args = parser.parse_args()
-    input_file = args.input_file
+    #parser.add_argument('input_file', help='The path to the JSON file to be parsed')
+    #args = parser.parse_args()
+    #input_file = args.input_file
     biden_files = ['20201101-biden.json', '20201102-biden.json', '20201103-biden.json', '20201104-biden.json', '20201105-biden.json', '20201106-biden.json']
     trump_files = ['20201101-trump.json', '20201102-trump.json', '20201103-trump.json', '20201104-trump.json', '20201105-trump.json', '20201106-trump.json']
 
@@ -44,6 +50,17 @@ def main():
     trump_supporters = add_to_supporter_set(trump_files, trump_supporters)
     print(len(biden_supporters))
     print(len(trump_supporters))
+
+    # Make sure we remove any authors that we found in both
+    duplicate_supporters = set()
+    duplicate_supporters = trump_supporters & biden_supporters
+    trump_supporters = trump_supporters - duplicate_supporters
+    biden_supporters = biden_supporters - duplicate_supporters
+
+    print(len(biden_supporters))
+    print(len(trump_supporters))
+    write_supporters_to_txt('biden_supporters.txt', biden_supporters)
+    write_supporters_to_txt('trump_supporters.txt', trump_supporters)
 
 if __name__ == '__main__':
     main()
