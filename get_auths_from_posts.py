@@ -1,4 +1,3 @@
-import argparse
 import json
 import os.path as osp
 
@@ -35,10 +34,6 @@ def write_supporters_to_txt(filename, supporter_list):
             f.write('\n')
 
 def main():
-    parser = argparse.ArgumentParser()
-    #parser.add_argument('input_file', help='The path to the JSON file to be parsed')
-    #args = parser.parse_args()
-    #input_file = args.input_file
     biden_files = ['20201101-biden.json', '20201102-biden.json', '20201103-biden.json', '20201104-biden.json', '20201105-biden.json', '20201106-biden.json']
     trump_files = ['20201101-trump.json', '20201102-trump.json', '20201103-trump.json', '20201104-trump.json', '20201105-trump.json', '20201106-trump.json']
 

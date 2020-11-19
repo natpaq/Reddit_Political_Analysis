@@ -72,7 +72,9 @@ def remove_less_active_subs(users_dict, min_comments, min_submissions):
     to_delete = list()
     for subreddit in users_dict.keys():
         if users_dict[subreddit]['comments'] < min_comments and users_dict[subreddit]['submissions'] < min_submissions:
-                to_delete.append(subreddit)
+            to_delete.append(subreddit)
+        elif users_dict[subreddit]['comments'] == 0:
+            to_delete.append(subreddit)
 
     # Delete the subreddits that aren't very active for a user
     for subreddit in to_delete:
@@ -81,16 +83,23 @@ def remove_less_active_subs(users_dict, min_comments, min_submissions):
     return users_dict
 
 def remove_political_subs(input_dict):
-    print('ha')
-
+    political_subreddits = ['JoeBiden', 'trump', 'donaldtrump', 'The_Donald', 'Republican', 'politics', 'Conservative', 'ConservativesOnly' ,
+    'worldpolitics', 'conservatives', 'askaconservative', 'ConservativeMemes', 'PoliticalHumor', 'PoliticalCompassMemes', 'AskALiberal', 'LadiesForTrump',
+    'AskTrumpSupporters', 'Donald_Trump', 'TrumpJR2020', 'Trumpvirus', 'TrumpCovidFailure', 'hottiesfortrump', 'TheTrumpZone', 'DonaldTrump20', 'EnoughTrumpSpam',
+    'VotingForTrump', 'real_trumpers', 'Trumpgret', 'DonaldJTrumpFanClub', 'BlackVoicesForTrump', 'bidenbro', 'BidenRegret', 'BidenIsFinished', 'JoeBidenSucks',
+    'ShitPoliticsSays', 'PoliticalMemes', 'ukpolitics', 'PoliticalDiscussion', 'TexasPolitics', 'Political_Tumor', 'PoliticalVideo', 'Liberal', 'liberalgunowners'
+    ]
+    for subreddit in political_subreddits:
+        input_dict.pop(subreddit, None)
+    return input_dict
 
 def main():
     # To store subreddit info by user
     all_users = dict()
     # To aggregate overall subreddit counts
     subreddit_freq = dict()
-
-    with open('trump_supporters.txt', 'r') as fread:
+    candidate = 'biden'
+    with open(f'{candidate}_supporters.txt', 'r') as fread:
         users = fread.readlines()
         i = 0
         for user in users:
@@ -104,8 +113,8 @@ def main():
             #    print(user)
 
             # Either scrape or retrieve user data from cache
-            user_submissions = get_user_data(user, 'submission', 'trump')
-            user_comments = get_user_data(user, 'comment', 'trump')
+            user_submissions = get_user_data(user, 'submission', candidate)
+            user_comments = get_user_data(user, 'comment', candidate)
 
             # Get user subreddit count to add to user dictionary
             updated_dict = get_subreddits(user_submissions, 'submissions', user_stats)
@@ -119,18 +128,22 @@ def main():
             all_users[user] = updated_dict
             # Disregard subreddits where users have made less than 5 comments and 5 posts
             all_users[user] = remove_less_active_subs(all_users[user], 5, 5)
+            all_users[user] = remove_political_subs(all_users[user])
+
 
     # Remove less active subreddits from overall subreddit frequency dict
-    subreddit_freq = remove_less_active_subs(subreddit_freq, 100, 100)
+    subreddit_freq = remove_less_active_subs(subreddit_freq, 100, 75)
+    subreddit_freq = remove_political_subs(subreddit_freq)
+
 
     # Remove obviously political subreddits
 
 
     #print(subreddit_freq)
-    with open('user_data/trump_subreddit_freq.json', 'w') as outfile:
+    with open(f'user_data/{candidate}_subreddit_freq.json', 'w') as outfile:
         json.dump(subreddit_freq, outfile, indent=2)
     #print(all_users)
-    with open('user_data/trump_user_subred_freq.json', 'w') as outfile:
+    with open(f'user_data/{candidate}_user_subred_freq.json', 'w') as outfile:
         json.dump(all_users, outfile, indent=2)
 
 
