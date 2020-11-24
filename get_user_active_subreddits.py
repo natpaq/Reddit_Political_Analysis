@@ -83,14 +83,68 @@ def remove_less_active_subs(users_dict, min_comments, min_submissions):
     return users_dict
 
 def remove_political_subs(input_dict):
-    political_subreddits = ['JoeBiden', 'trump', 'donaldtrump', 'The_Donald', 'Republican', 'politics', 'Conservative', 'ConservativesOnly' ,
-    'worldpolitics', 'conservatives', 'askaconservative', 'ConservativeMemes', 'PoliticalHumor', 'PoliticalCompassMemes', 'AskALiberal', 'LadiesForTrump',
-    'AskTrumpSupporters', 'Donald_Trump', 'TrumpJR2020', 'Trumpvirus', 'TrumpCovidFailure', 'hottiesfortrump', 'TheTrumpZone', 'DonaldTrump20', 'EnoughTrumpSpam',
-    'VotingForTrump', 'real_trumpers', 'Trumpgret', 'DonaldJTrumpFanClub', 'BlackVoicesForTrump', 'bidenbro', 'BidenRegret', 'BidenIsFinished', 'JoeBidenSucks',
-    'ShitPoliticsSays', 'PoliticalMemes', 'ukpolitics', 'PoliticalDiscussion', 'TexasPolitics', 'Political_Tumor', 'PoliticalVideo', 'Liberal', 'liberalgunowners'
-    ]
+    political_subreddits = ['JoeBiden',
+                            'trump',
+                            'donaldtrump',
+                            'The_Donald',
+                            'Republican',
+                            'politics',
+                            'Conservative',
+                            'ConservativesOnly',
+                            'worldpolitics',
+                            'conservatives',
+                            'askaconservative',
+                            'ConservativeMemes',
+                            'PoliticalHumor',
+                            'PoliticalCompassMemes',
+                            'AskALiberal',
+                            'LadiesForTrump',
+                            'AskTrumpSupporters',
+                            'Donald_Trump',
+                            'TrumpJR2020',
+                            'Trumpvirus',
+                            'TrumpCovidFailure',
+                            'hottiesfortrump',
+                            'TheTrumpZone',
+                            'DonaldTrump20',
+                            'EnoughTrumpSpam',
+                            'VotingForTrump',
+                            'real_trumpers',
+                            'Trumpgret',
+                            'DonaldJTrumpFanClub',
+                            'BlackVoicesForTrump',
+                            'bidenbro',
+                            'BidenRegret',
+                            'BidenIsFinished',
+                            'JoeBidenSucks',
+                            'ShitPoliticsSays',
+                            'PoliticalMemes',
+                            'ukpolitics',
+                            'PoliticalDiscussion',
+                            'TexasPolitics',
+                            'Political_Tumor',
+                            'PoliticalVideo',
+                            'Liberal',
+                            'liberalgunowners',
+                            'democrats',
+                            'Kamala',
+                            'Pete_Buttigieg',
+                            'neoliberal',
+                            'LateStageCapitalism',
+                            'Impeach_Trump',
+                            'TheRightCantMeme',
+                            'The_Mueller',
+                            'WAlitics',
+                            'TheLeftCantMeme',
+                            'centrist',
+                            'MGTOW',
+                            'prolife',
+                            'LouderWithCrowder',
+                            'libertarianmeme',
+                            'Libertarian',
+                            'Enough_Sanders_Spam']
     for subreddit in political_subreddits:
-        input_dict.pop(subreddit, None)
+        input_dict.pop(subreddit, None) # i dont want to remove this and instead want to annotate it as political
     return input_dict
 
 def main():
@@ -133,11 +187,8 @@ def main():
 
     # Remove less active subreddits from overall subreddit frequency dict
     subreddit_freq = remove_less_active_subs(subreddit_freq, 100, 75)
-    subreddit_freq = remove_political_subs(subreddit_freq)
-
-
     # Remove obviously political subreddits
-
+    subreddit_freq = remove_political_subs(subreddit_freq)
 
     #print(subreddit_freq)
     with open(f'user_data/{candidate}_subreddit_freq.json', 'w') as outfile:
