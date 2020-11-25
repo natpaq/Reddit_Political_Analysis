@@ -37,7 +37,6 @@ def get_user_posts(author_name, num_posts, sub_or_com):
 # posts --> comments or posts to be added to the dict
 # posts_string --> either 'comment' or 'submission' depending on which we're processing
 # dict_name --> dict storing user subreddit info
-# subreddit_freq_dict --> dict that keeps track of how many users are active on a particular subreddit
 def get_subreddits(posts, posts_string, dict_name):
     for post in posts:
         if type(post) != dict:
@@ -101,7 +100,6 @@ def main():
     candidate = 'biden'
     with open(f'{candidate}_supporters.txt', 'r') as fread:
         users = fread.readlines()
-        i = 0
         for user in users:
             user_stats = dict()
             user = user.strip()
@@ -132,14 +130,14 @@ def main():
 
 
     # Remove less active subreddits from overall subreddit frequency dict
-    subreddit_freq = remove_less_active_subs(subreddit_freq, 100, 75)
+    subreddit_freq = remove_less_active_subs(subreddit_freq, 50, 50)
     subreddit_freq = remove_political_subs(subreddit_freq)
 
 
     # Remove obviously political subreddits
 
 
-    #print(subreddit_freq)
+    print(subreddit_freq)
     with open(f'user_data/{candidate}_subreddit_freq.json', 'w') as outfile:
         json.dump(subreddit_freq, outfile, indent=2)
     #print(all_users)
