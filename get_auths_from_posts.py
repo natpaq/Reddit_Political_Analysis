@@ -11,7 +11,6 @@ def get_supporters_from_file(filename, supporter_set, file_writer, candidate):
     filepath = osp.join('596_data/', filename)
     with open(filepath, 'r') as myfile:
         lines = myfile.readlines()
-        i = 0
         for line in lines:
             this_dict = json.loads(line)
             # Do a sentiment analysis on the post content
@@ -30,17 +29,14 @@ def get_supporters_from_file(filename, supporter_set, file_writer, candidate):
             for post_type in [post_title, post_text]:
             # Only consider positive posts where authors mention the candidate whose sub they posted on negative posts that mentioned the opposing candidate
                 if (re.search(search_string, post_type, re.IGNORECASE) and polarity > 0) or (re.search(opponent_string, post_type, re.IGNORECASE) and polarity < 0):
-                    #print(analysis)
-                    i += 1
                     # Write these potential posts to a file
-                    row = [post_title, analysis[0], analysis[1], this_dict['author']]
+                    row = [post_title, polarity, subjectivity, this_dict['author']]
                     file_writer.writerow(row)
 
             # Verify that there is an author associated with the post
                     if 'author' in this_dict:
                         author = this_dict['author']
                         supporter_set.add(author)
-        print(i)
     return supporter_set
 
 # Aggregates all the sets of supporters together for the candidate
@@ -79,8 +75,8 @@ def main():
             biden_supporters = supporters
         else:
             trump_supporters = supporters
-    print(len(biden_supporters))
-    print(len(trump_supporters))
+    #print(len(biden_supporters))
+    #print(len(trump_supporters))
 
     # Make sure we remove any authors that we found in both
     duplicate_supporters = set()
@@ -88,8 +84,8 @@ def main():
     trump_supporters = trump_supporters - duplicate_supporters
     biden_supporters = biden_supporters - duplicate_supporters
 
-    print(len(biden_supporters))
-    print(len(trump_supporters))
+    #print(len(biden_supporters))
+    #print(len(trump_supporters))
     write_supporters_to_txt('biden_supporters.txt', biden_supporters)
     write_supporters_to_txt('trump_supporters.txt', trump_supporters)
 

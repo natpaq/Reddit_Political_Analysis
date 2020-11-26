@@ -136,12 +136,22 @@ def remove_political_subs(input_dict):
                             'WAlitics',
                             'TheLeftCantMeme',
                             'centrist',
-                            'MGTOW',
-                            'prolife',
                             'LouderWithCrowder',
                             'libertarianmeme',
                             'Libertarian',
-                            'Enough_Sanders_Spam']
+                            'Enough_Sanders_Spam',
+                            'AmericanFascism2020',
+                            'YangForPresidentHQ',
+                            'AskConservatives',
+                            'HeckOffCommie',
+                            'AskThe_Donald',
+                            'Democrats2020',
+                            'VoteDEM',
+                            'Forum_Democratie',
+                            'republicans',
+                            'POLYTICAL',
+                            'SandersForPresident',
+                            ]
     for subreddit in political_subreddits:
         input_dict.pop(subreddit, None) # i dont want to remove this and instead want to annotate it as political
     return input_dict
@@ -185,13 +195,10 @@ def main():
 
     # Remove less active subreddits from overall subreddit frequency dict
     subreddit_freq = remove_less_active_subs(subreddit_freq, 50, 50)
-    subreddit_freq = remove_political_subs(subreddit_freq)
-
 
     # Remove obviously political subreddits
     subreddit_freq = remove_political_subs(subreddit_freq)
 
-    print(subreddit_freq)
     with open(f'user_data/{candidate}_subreddit_freq.json', 'w') as outfile:
         json.dump(subreddit_freq, outfile, indent=2)
     #print(all_users)
