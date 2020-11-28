@@ -4,3 +4,5 @@ biden_supporters.txt
 user_data/
 user_posts/
 user_data.zip
+.idea/
+*.tmp

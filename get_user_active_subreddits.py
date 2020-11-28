@@ -161,7 +161,8 @@ def main():
     all_users = dict()
     # To aggregate overall subreddit counts
     subreddit_freq = dict()
-    candidate = 'biden'
+    subreddit_freq_global = dict()
+    candidate = 'trump'
     with open(f'{candidate}_supporters.txt', 'r') as fread:
         users = fread.readlines()
         for user in users:
@@ -190,18 +191,25 @@ def main():
             all_users[user] = updated_dict
             # Disregard subreddits where users have made less than 5 comments and 5 posts
             all_users[user] = remove_less_active_subs(all_users[user], 5, 5)
-            all_users[user] = remove_political_subs(all_users[user])
+            # do not remove the political ones just yet!
+            # all_users[user] = remove_political_subs(all_users[user])
 
 
     # Remove less active subreddits from overall subreddit frequency dict
     subreddit_freq = remove_less_active_subs(subreddit_freq, 50, 50)
+
+    # store the global view just to check
+    subreddit_freq_global = subreddit_freq.copy()
 
     # Remove obviously political subreddits
     subreddit_freq = remove_political_subs(subreddit_freq)
 
     with open(f'user_data/{candidate}_subreddit_freq.json', 'w') as outfile:
         json.dump(subreddit_freq, outfile, indent=2)
-    #print(all_users)
+
+    with open(f'user_data/{candidate}_subreddit_freq_global.json', 'w') as outfile:
+        json.dump(subreddit_freq_global, outfile, indent=2)
+
     with open(f'user_data/{candidate}_user_subred_freq.json', 'w') as outfile:
         json.dump(all_users, outfile, indent=2)
 
