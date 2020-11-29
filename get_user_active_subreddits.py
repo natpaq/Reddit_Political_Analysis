@@ -162,7 +162,7 @@ def main():
     # To aggregate overall subreddit counts
     subreddit_freq = dict()
     subreddit_freq_global = dict()
-    candidate = 'trump'
+    candidate = 'biden'
     with open(f'{candidate}_supporters.txt', 'r') as fread:
         users = fread.readlines()
         for user in users:
@@ -192,7 +192,7 @@ def main():
             # Disregard subreddits where users have made less than 5 comments and 5 posts
             all_users[user] = remove_less_active_subs(all_users[user], 5, 5)
             # do not remove the political ones just yet!
-            # all_users[user] = remove_political_subs(all_users[user])
+            all_users[user] = remove_political_subs(all_users[user])
 
 
     # Remove less active subreddits from overall subreddit frequency dict
